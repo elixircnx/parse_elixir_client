@@ -3,6 +3,8 @@ defmodule ParseElixirClient do
   REST API client for Parse
   """
 
+  alias ParseElixirClient.Request
+
   @doc """
   Creates the URL for an endpoint
   Args:
@@ -41,7 +43,7 @@ defmodule ParseElixirClient do
   Returns dict
   """
   def request(endpoint, body) do
-    ParseElixirClient.post(endpoint, JSEX.encode! body).body
+    Request.make_request endpoint, JSEX.encode! body
   end
 
   @doc """
