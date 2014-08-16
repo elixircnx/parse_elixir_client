@@ -12,7 +12,7 @@ defmodule ParseElixirClient.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :httpoison]]
   end
 
   # Dependencies can be hex.pm packages:
@@ -25,6 +25,10 @@ defmodule ParseElixirClient.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    []
+    [
+      {:jsex,   "~> 2.0.0"},
+      {:hackney, github: "benoitc/hackney", tag: "0.13.0"},
+      {:httpoison, "~> 0.3.2"}
+    ]
   end
 end
