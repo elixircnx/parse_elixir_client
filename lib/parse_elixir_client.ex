@@ -29,7 +29,7 @@ defmodule ParseClient do
   def get(endpoint) do
     process_url(endpoint)
     |> HTTPoison.get(get_headers)
-    |> JSEX.decode [{:labels, :atom}]
+    #|> JSEX.decode [{:labels, :atom}]
   end
 
   @doc """
