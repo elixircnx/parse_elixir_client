@@ -21,15 +21,32 @@ defmodule ParseClient do
   end
 
   @doc """
+  Checks that the body can be decoded and handles any errors
+  Converts binary response keys to atoms
+  Args:
+  * body - string binary response
+  Returns Record or ArgumentError
+  ## Example
+  iex> body = ~S({\"score\":1337,\"objectId\":\"sOxpug2373\",\"playerName\":\"Sean Plott\"})
+  iex> ParseElixirClient.process_body(body)
+  %{score: 1337, objectId: "sOxpug2373", playerName: "Sean Plott"}
+  """
+  def process_body(json_body) do
+    case JSEX.decode(json_body, [{:labels, :atom}]) do
+      {:ok, text} -> text
+      {:error, error} -> error
+    end
+  end
+
+  @doc """
   Code for get requests
   Args:
     * endpoint - string requested API endpoint
   Returns dict
   """
   def get(endpoint) do
-    process_url(endpoint)
-    |> HTTPoison.get(get_headers)
-    |> JSEX.decode! [{:labels, :atom}]
+    HTTPoison.get(process_url(endpoint), get_headers).body
+    |> process_body
   end
 
   @doc """
@@ -41,7 +58,7 @@ defmodule ParseClient do
   def post(endpoint, body) do
     text = JSEX.encode! body
     process_url(endpoint)
-    |> HTTPoison.post(text, post_headers)
+    |> HTTPoison.post text, post_headers
   end
 
   @doc """
@@ -53,7 +70,7 @@ defmodule ParseClient do
   def put(endpoint, body) do
     text = JSEX.encode! body
     process_url(endpoint)
-    |> HTTPoison.put(text, post_headers)
+    |> HTTPoison.put text, post_headers
   end
 
   @doc """
@@ -63,7 +80,7 @@ defmodule ParseClient do
   """
   def delete(endpoint) do
     process_url(endpoint)
-    |> HTTPoison.delete(get_headers)
+    |> HTTPoison.delete get_headers
   end
 
   @doc """
