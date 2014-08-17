@@ -21,49 +21,49 @@ defmodule ParseClient do
   end
 
   @doc """
-  Code for get requests.
+  Code for get requests
   Args:
     * endpoint - string requested API endpoint
   Returns dict
   """
-  def get(endpoint, headers \\ [], options \\ []) do
+  def get(endpoint) do
     process_url(endpoint)
-    |> HTTPoison.get(get_headers ++ headers, options)
-    |> JSEX.decode! [{:labels, :atom}]
+    |> HTTPoison.get(get_headers)
+    |> JSEX.decode [{:labels, :atom}]
   end
 
   @doc """
-  Code for post requests.
+  Code for post requests
   Args:
     * endpoint - string requested API endpoint
     * body - body which is converted to JSON
   """
-  def post(endpoint, body, headers \\ [], options \\ []) do
+  def post(endpoint, body) do
     text = JSEX.encode! body
     process_url(endpoint)
-    |> HTTPoison.post(text, get_headers(true) ++ headers, options)
+    |> HTTPoison.post(text, post_headers)
   end
 
   @doc """
-  Code for put requests.
+  Code for put requests
   Args:
     * endpoint - string requested API endpoint
     * body - body which is converted to JSON
   """
-  def put(endpoint, body, headers \\ [], options \\ []) do
+  def put(endpoint, body) do
     text = JSEX.encode! body
     process_url(endpoint)
-    |> HTTPoison.put(text, get_headers(true) ++ headers, options)
+    |> HTTPoison.put(text, post_headers)
   end
 
   @doc """
-  Code for delete requests.
+  Code for delete requests
   Args:
     * endpoint - string requested API endpoint
   """
-  def delete(endpoint, headers \\ [], options \\ []) do
+  def delete(endpoint) do
     process_url(endpoint)
-    |> HTTPoison.post(get_headers ++ headers, options)
+    |> HTTPoison.delete(get_headers)
   end
 
   @doc """
@@ -81,12 +81,15 @@ defmodule ParseClient do
   end
 
   @doc """
-  List of headers. It includes the
-  API authentication headers.
+  Lists of headers which include the
+  API authentication headers
   """
-  def get_headers(json \\ false) do
-    headers = ["X-Parse-Application-Id": application_id,
-              "X-Parse-REST-API-Key": api_key]
-    if json, do: headers = headers ++ ["Content-type": "application/json"]
+  def get_headers do
+    %{"X-Parse-Application-Id" => application_id,
+      "X-Parse-REST-API-Key" => api_key}
+  end
+
+  def post_headers do
+      Dict.put(get_headers, "Content-Type", "application/json")
   end
 end
