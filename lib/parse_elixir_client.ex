@@ -1,9 +1,9 @@
-defmodule ParseElixirClient do
+defmodule ParseClient do
   @moduledoc """
   REST API client for Parse
   """
 
-  alias ParseElixirClient.Request
+  @parse_url "https://api.parse.com/1/"
 
   @doc """
   Creates the URL for an endpoint
@@ -13,37 +13,57 @@ defmodule ParseElixirClient do
 
   ## Example
       iex> endpoint = "classes/GameScore"
-      iex> ParseElixirClient.process_url(endpoint)
-      "https://api.parse.com/1/classes/GameScore.json"
+      iex> ParseClient.process_url(endpoint)
+      "https://api.parse.com/1/classes/GameScore"
   """
   def process_url(endpoint) do
-    "https://api.parse.com/1/#{endpoint}" <> ".json"
+    @parse_url <> endpoint
   end
 
   @doc """
-  Converts binary response keys to atoms
-  Args:
-    * body - string binary response
-  Returns Record or ArgumentError
-
-  ## Example
-      iex> body = ~S({\"score\":1337,\"objectId\":\"sOxpug2373\",\"playerName\":\"Sean Plott\"})
-      iex> ParseElixirClient.process_response_body(body)
-      %{score: 1337, objectId: "sOxpug2373", playerName: "Sean Plott"}
-  """
-  def process_response_body(body) do
-    JSEX.decode!(body, [{:labels, :atom}])
-  end
-
-  @doc """
-  Boilerplate code to make requests
+  Code for get requests.
   Args:
     * endpoint - string requested API endpoint
-    * body - request body
   Returns dict
   """
-  def request(endpoint, body) do
-    Request.make_request endpoint, JSEX.encode! body
+  def get(endpoint, headers \\ [], options \\ []) do
+    process_url(endpoint)
+    |> HTTPoison.get(get_headers ++ headers, options)
+    |> JSEX.decode! [{:labels, :atom}]
+  end
+
+  @doc """
+  Code for post requests.
+  Args:
+    * endpoint - string requested API endpoint
+    * body - body which is converted to JSON
+  """
+  def post(endpoint, body, headers \\ [], options \\ []) do
+    text = JSEX.encode! body
+    process_url(endpoint)
+    |> HTTPoison.post(text, get_headers(true) ++ headers, options)
+  end
+
+  @doc """
+  Code for put requests.
+  Args:
+    * endpoint - string requested API endpoint
+    * body - body which is converted to JSON
+  """
+  def put(endpoint, body, headers \\ [], options \\ []) do
+    text = JSEX.encode! body
+    process_url(endpoint)
+    |> HTTPoison.put(text, get_headers(true) ++ headers, options)
+  end
+
+  @doc """
+  Code for delete requests.
+  Args:
+    * endpoint - string requested API endpoint
+  """
+  def delete(endpoint, headers \\ [], options \\ []) do
+    process_url(endpoint)
+    |> HTTPoison.post(get_headers ++ headers, options)
   end
 
   @doc """
@@ -61,10 +81,12 @@ defmodule ParseElixirClient do
   end
 
   @doc """
-  API authentication headers
+  List of headers. It includes the
+  API authentication headers.
   """
-  def map_header do
-    %{"X-Parse-Application-Id" => application_id,
-      "X-Parse-REST-API-Key"   => api_key}
+  def get_headers(json \\ false) do
+    headers = ["X-Parse-Application-Id": application_id,
+              "X-Parse-REST-API-Key": api_key]
+    if json, do: headers = headers ++ ["Content-type": "application/json"]
   end
 end
