@@ -29,7 +29,7 @@ defmodule ParseClient do
   def get(endpoint) do
     process_url(endpoint)
     |> HTTPoison.get(get_headers)
-    #|> JSEX.decode [{:labels, :atom}]
+    |> JSEX.decode! [{:labels, :atom}]
   end
 
   @doc """
@@ -70,14 +70,26 @@ defmodule ParseClient do
   Grabs PARSE_API_KEY from system ENV
   """
   def api_key do
-    System.get_env("PARSE_REST_API_KEY")
+    System.get_env "PARSE_REST_API_KEY"
   end
 
   @doc """
   Grabs PARSE_APPLICATION_KEY from system ENV
   """
   def application_id do
-    System.get_env("PARSE_APPLICATION_ID")
+    System.get_env "PARSE_APPLICATION_ID"
+  end
+
+  @doc """
+  The following two functions let you set
+  the environment values
+  """
+  def set_api_key(api_key) do
+    System.put_env "PARSE_REST_API_KEY", api_key
+  end
+
+  def set_application_id(app_id) do
+    System.put_env "PARSE_APPLICATION_ID", app_id
   end
 
   @doc """
