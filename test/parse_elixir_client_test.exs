@@ -1,4 +1,4 @@
-defmodule ParseElixirClientTest do
+defmodule ParseClientTest do
   use ExUnit.Case
 
   test "the truth" do

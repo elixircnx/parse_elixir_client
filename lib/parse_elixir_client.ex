@@ -3,6 +3,8 @@ defmodule ParseClient do
   REST API client for Parse
   """
 
+  use HTTPoison.Base
+
   @parse_url "https://api.parse.com/1/"
 
   @doc """
@@ -21,6 +23,16 @@ defmodule ParseClient do
   end
 
   @doc """
+  Checks that the body can be encoded and handles any errors
+  """
+  def process_request_body(body) do
+    case JSEX.encode(body) do
+      {:ok, text} -> text
+      {:error, _} -> "An error has occurred while encoding into json"
+    end
+  end
+
+  @doc """
   Checks that the body can be decoded and handles any errors
   Converts binary response keys to atoms
   Args:
@@ -28,59 +40,21 @@ defmodule ParseClient do
   Returns Record or ArgumentError
   ## Example
   iex> body = ~S({\"score\":1337,\"objectId\":\"sOxpug2373\",\"playerName\":\"Sean Plott\"})
-  iex> ParseElixirClient.process_body(body)
+  iex> ParseClient.process_response_body(body)
   %{score: 1337, objectId: "sOxpug2373", playerName: "Sean Plott"}
   """
-  def process_body(json_body) do
-    case JSEX.decode(json_body, [{:labels, :atom}]) do
+  def process_response_body(body) do
+    case JSEX.decode(body, [{:labels, :atom}]) do
       {:ok, text} -> text
-      {:error, error} -> error
+      {:error, _} -> "An error has occurred while processing the json response"
     end
   end
 
   @doc """
-  Code for get requests
-  Args:
-    * endpoint - string requested API endpoint
-  Returns dict
+  Add headers for requests
   """
-  def get(endpoint) do
-    HTTPoison.get(process_url(endpoint), get_headers).body
-    |> process_body
-  end
-
-  @doc """
-  Code for post requests
-  Args:
-    * endpoint - string requested API endpoint
-    * body - body which is converted to JSON
-  """
-  def post(endpoint, body) do
-    text = JSEX.encode! body
-    process_url(endpoint)
-    |> HTTPoison.post text, post_headers
-  end
-
-  @doc """
-  Code for put requests
-  Args:
-    * endpoint - string requested API endpoint
-    * body - body which is converted to JSON
-  """
-  def put(endpoint, body) do
-    text = JSEX.encode! body
-    process_url(endpoint)
-    |> HTTPoison.put text, post_headers
-  end
-
-  @doc """
-  Code for delete requests
-  Args:
-    * endpoint - string requested API endpoint
-  """
-  def delete(endpoint) do
-    process_url(endpoint)
-    |> HTTPoison.delete get_headers
+  def process_request_headers(_) do
+    Enum.into get_headers, []
   end
 
   @doc """
@@ -98,13 +72,15 @@ defmodule ParseClient do
   end
 
   @doc """
-  The following two functions let you set
-  the environment values
+  Sets PARSE_API_KEY
   """
   def set_api_key(api_key) do
     System.put_env "PARSE_REST_API_KEY", api_key
   end
 
+  @doc """
+  Sets PARSE_APPLICATION_KEY
+  """
   def set_application_id(app_id) do
     System.put_env "PARSE_APPLICATION_ID", app_id
   end

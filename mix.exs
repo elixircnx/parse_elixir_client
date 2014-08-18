@@ -1,4 +1,4 @@
-defmodule ParseElixirClient.Mixfile do
+defmodule ParseClient.Mixfile do
   use Mix.Project
 
   def project do
@@ -27,8 +27,7 @@ defmodule ParseElixirClient.Mixfile do
   defp deps do
     [
       {:jsex,   "~> 2.0.0"},
-      {:hackney, github: "benoitc/hackney", tag: "0.13.0"},
-      {:httpoison, "~> 0.3.2"}
+      {:httpoison, "~> 0.4.0"}
     ]
   end
 end
