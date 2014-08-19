@@ -1,4 +1,4 @@
-ParseElixirClient
+ParseClient
 ===================
 
 An Elixir client for the parse.com REST API

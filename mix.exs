@@ -1,4 +1,4 @@
-defmodule ParseElixirClient.Mixfile do
+defmodule ParseClient.Mixfile do
   use Mix.Project
 
   def project do
