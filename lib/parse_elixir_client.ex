@@ -2,7 +2,7 @@ defmodule ParseClient do
   @moduledoc """
   REST API client for Parse
 
-  Example use
+  Example usage
 
   To get information about a class:
 
@@ -53,12 +53,7 @@ defmodule ParseClient do
       iex> ParseClient.process_request_body(body)
       ~S({\"clothes\":\"stockings\",\"job\":\"Lumberjack\"})
   """
-  def process_request_body(body) do
-    case JSEX.encode(body) do
-      {:ok, text} -> text
-      {:error, _} -> "An error has occurred while encoding into json"
-    end
-  end
+  def process_request_body(body), do: JSEX.encode! body
 
   @doc """
   Checks that the body can be decoded and handles any errors
@@ -78,15 +73,41 @@ defmodule ParseClient do
     end
   end
 
-  def query(url), do: request(:get, url, "", get_headers).body
+  @doc """
+  Parse filters and options in the query.
+  """
+  def parse_filters(filters, options) do
+    unless filters == "", do: filters = %{where: JSEX.encode!(filters)} |> URI.encode_query
+    unless options == %{}, do: options = options |> URI.encode_query
+    filters <> options
+  end
 
   def get(url), do: request(:get, url, "", get_headers)
+
+  @doc """
+  Get request with filters.
+
+  Filters is a map that is used to make a `where={}` query.
+  Options is also a map. Options include "order", "limit", "count" and "include".
+
+  To make a request with options, but no filters, use "" as the second argument:
+
+      ParseClient.get("classes/Animals", "", %{"order" => "createdAt"})
+  """
+  def get(url, filters, options \\ %{}) do
+    filter_string = parse_filters(filters, options)
+    request(:get, url <> "?" <> filter_string, "", get_headers)
+  end
 
   def post(url, body), do: request(:post, url, body, post_headers)
 
   def put(url, body), do: request(:put, url, body, post_headers)
 
   def delete(url), do: request(:delete, url, "", get_headers)
+
+  def query(args), do: get(args).body
+
+  def query(url, filters, options \\ []), do: get(url, filters, options).body
 
   @doc """
   Grabs PARSE_API_KEY from system ENV
@@ -114,6 +135,6 @@ defmodule ParseClient do
   Headers for post and put requests
   """
   def post_headers do
-      Dict.put(get_headers, "Content-Type", "application/json")
+    Dict.put(get_headers, "Content-Type", "application/json")
   end
 end
