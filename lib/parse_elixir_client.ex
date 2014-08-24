@@ -90,30 +90,39 @@ defmodule ParseClient do
 
   @doc """
   Grabs PARSE_API_KEY from system ENV
+  Returns key or ArgumentError
+  ## Examples
+      iex> System.put_env("TEST_VARIABLE", "elixir_parse_test")
+      iex> ParseClient.get_system_variable("TEST_VARIABLE")
+      "elixir_parse_test"
+
+      iex> System.delete_env("TEST_VARIABLE")
+      iex> ParseClient.get_system_variable("TEST_VARIABLE")
+      ** (ArgumentError) parse system variable not set
   """
-  def api_key do
-    System.get_env "PARSE_REST_API_KEY"
+  def get_system_variable(variable) do
+    System.get_env(variable)
+      |> check_variable
   end
 
-  @doc """
-  Grabs PARSE_APPLICATION_KEY from system ENV
-  """
-  def application_id do
-    System.get_env "PARSE_APPLICATION_ID"
+  defp check_variable(nil) do
+    raise ArgumentError, message: "parse system variable not set"
   end
+
+  defp check_variable(system_variable), do: system_variable
 
   @doc """
   Headers for get and delete requests
   """
   def get_headers do
-    %{"X-Parse-Application-Id" => application_id,
-      "X-Parse-REST-API-Key" => api_key}
+    %{"X-Parse-Application-Id" => get_system_variable("PARSE_APPLICATION_ID"),
+      "X-Parse-REST-API-Key"   => get_system_variable("PARSE_REST_API_KEY")}
   end
 
   @doc """
   Headers for post and put requests
   """
   def post_headers do
-      Dict.put(get_headers, "Content-Type", "application/json")
+    Dict.put(get_headers, "Content-Type", "application/json")
   end
 end
