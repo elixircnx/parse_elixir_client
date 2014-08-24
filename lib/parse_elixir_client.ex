@@ -2,7 +2,7 @@ defmodule ParseClient do
   @moduledoc """
   REST API client for Parse
 
-  Example usage
+  ## Example usage
 
   To get information about a class:
 
@@ -25,17 +25,33 @@ defmodule ParseClient do
   To delete an object:
 
       ParseClient.delete("classes/Animals/12345678")
+
+  ## Use of filters when making queries
+
+  The following command will check for Animals that have a status of 1:
+
+      ParseClient.get("classes/Animals", %{"status" => 1})
+
+  And this command will do the same check and print the results in the order
+  that the items were created (use `-createdAt` to view the results in
+  descending order):
+
+      ParseClient.get("classes/Animals", %{"status" => 1}, %{"order" => "createdAt"})
   """
 
   alias ParseClient.Requests
 
   @doc """
-  Parse filters and options in the query.
+  Parse filters and options in the query when both are maps.
   """
   def parse_filters(filters, options) when is_map(filters) and is_map(options) do
-    %{where: JSEX.encode!(filters)} |> URI.encode_query
+    Dict.merge(%{where: JSEX.encode!(filters)}, options)
+    |> URI.encode_query
   end
 
+  @doc """
+  Parse filters and options in the query.
+  """
   def parse_filters(filters, options) do
     unless filters == "", do: filters = %{where: JSEX.encode!(filters)} |> URI.encode_query
     unless options == "", do: options = options |> URI.encode_query
