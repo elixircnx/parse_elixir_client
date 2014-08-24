@@ -2,7 +2,7 @@ defmodule ParseClient do
   @moduledoc """
   REST API client for Parse
 
-  Example use
+  ## Example usage
 
   To get information about a class:
 
@@ -25,68 +25,65 @@ defmodule ParseClient do
   To delete an object:
 
       ParseClient.delete("classes/Animals/12345678")
+
+  ## Use of filters when making queries
+
+  The following command will check for Animals that have a status of 1:
+
+      ParseClient.get("classes/Animals", %{"status" => 1})
+
+  And this command will do the same check and print the results in the order
+  that the items were created (use `-createdAt` to view the results in
+  descending order):
+
+      ParseClient.get("classes/Animals", %{"status" => 1}, %{"order" => "createdAt"})
   """
 
-  use HTTPoison.Base
-
-  @parse_url "https://api.parse.com/1/"
+  alias ParseClient.Requests
 
   @doc """
-  Creates the URL for an endpoint
-  Args:
-    * endpoint - part of the API we're hitting
-  Returns string
-
-  ## Example
-      iex> endpoint = "classes/GameScore"
-      iex> ParseClient.process_url(endpoint)
-      "https://api.parse.com/1/classes/GameScore"
+  Parse filters and options in the query when both are maps.
   """
-  def process_url(endpoint) do
-    @parse_url <> endpoint
+  def parse_filters(filters, options) when is_map(filters) and is_map(options) do
+    Dict.merge(%{where: JSEX.encode!(filters)}, options)
+    |> URI.encode_query
   end
 
   @doc """
-  Checks that the body can be encoded and handles any errors
-  ## Example
-      iex> body = %{"job" => "Lumberjack", "clothes" => "stockings"}
-      iex> ParseClient.process_request_body(body)
-      ~S({\"clothes\":\"stockings\",\"job\":\"Lumberjack\"})
+  Parse filters and options in the query.
   """
-  def process_request_body(body) do
-    case JSEX.encode(body) do
-      {:ok, text} -> text
-      {:error, _} -> "An error has occurred while encoding into json"
-    end
+  def parse_filters(filters, options) do
+    unless filters == "", do: filters = %{where: JSEX.encode!(filters)} |> URI.encode_query
+    unless options == "", do: options = options |> URI.encode_query
+    filters <> options
   end
+
+  def get(url), do: Requests.request(:get, url, "", get_headers)
 
   @doc """
-  Checks that the body can be decoded and handles any errors
-  Converts binary response keys to atoms
-  Args:
-  * body - string binary response
-  Returns Record or ArgumentError
-  ## Example
-      iex> body = ~S({\"score\":1337,\"objectId\":\"sOxpug2373\",\"playerName\":\"Sean Plott\"})
-      iex> ParseClient.process_response_body(body)
-      %{score: 1337, objectId: "sOxpug2373", playerName: "Sean Plott"}
+  Get request with filters.
+
+  Filters is a map that is used to make a `where={}` query.
+  Options is also a map. Options include "order", "limit", "count" and "include".
+
+  To make a request with options, but no filters, use "" as the second argument:
+
+      ParseClient.get("classes/Animals", "", %{"order" => "createdAt"})
   """
-  def process_response_body(body) do
-    case JSEX.decode(body, [{:labels, :atom}]) do
-      {:ok, text} -> text
-      {:error, _} -> "An error has occurred while processing the json response"
-    end
+  def get(url, filters, options \\ "") do
+    filter_string = parse_filters(filters, options)
+    Requests.request(:get, url <> "?" <> filter_string, "", get_headers)
   end
 
-  def query(url), do: request(:get, url, "", get_headers).body
+  def post(url, body), do: Requests.request(:post, url, body, post_headers)
 
-  def get(url), do: request(:get, url, "", get_headers)
+  def put(url, body), do: Requests.request(:put, url, body, post_headers)
 
-  def post(url, body), do: request(:post, url, body, post_headers)
+  def delete(url), do: Requests.request(:delete, url, "", get_headers)
 
-  def put(url, body), do: request(:put, url, body, post_headers)
+  def query(url), do: get(url).body
 
-  def delete(url), do: request(:delete, url, "", get_headers)
+  def query(url, filters, options \\ []), do: get(url, filters, options).body
 
   @doc """
   Grabs PARSE_API_KEY from system ENV
@@ -114,6 +111,6 @@ defmodule ParseClient do
   Headers for post and put requests
   """
   def post_headers do
-      Dict.put(get_headers, "Content-Type", "application/json")
+    Dict.put(get_headers, "Content-Type", "application/json")
   end
 end
