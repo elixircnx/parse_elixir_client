@@ -65,14 +65,6 @@ defmodule ParseClient do
   @doc """
   Grabs PARSE_APPLICATION_ID and PARSE_API_KEY from system ENV
   Returns key or ArgumentError
-  ## Examples
-      iex> System.put_env("TEST_VARIABLE", "elixir_parse_test")
-      iex> ParseClient.get_system_variable("TEST_VARIABLE")
-      "elixir_parse_test"
-
-      iex> System.delete_env("TEST_VARIABLE")
-      iex> ParseClient.get_system_variable("TEST_VARIABLE")
-      ** (ArgumentError) parse system variable not set
   """
   def get_system_variable(variable) do
     System.get_env(variable)
