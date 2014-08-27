@@ -23,7 +23,7 @@ defmodule ParseClient.Requests do
   end
 
   @doc """
-  Checks that the body can be encoded and handles any errors
+  Encodes the body and raises an error if it cannot be encoded
   ## Example
       iex> body = %{"job" => "Lumberjack", "clothes" => "stockings"}
       iex> ParseClient.Requests.process_request_body(body)
@@ -53,8 +53,7 @@ defmodule ParseClient.Requests do
   Parse filters and options in the query.
   """
   def parse_filters(filters, options) when is_map(filters) and map_size(filters) > 0 do
-    %{where: JSEX.encode!(filters)} |> Dict.merge(options)
-    |> URI.encode_query
+    %{where: JSEX.encode!(filters)} |> Dict.merge(options) |> URI.encode_query
   end
 
   @doc """
