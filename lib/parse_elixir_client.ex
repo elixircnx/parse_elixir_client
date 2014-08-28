@@ -30,50 +30,25 @@ defmodule ParseClient do
 
   The following command will check for Animals that have a status of 1:
 
-      ParseClient.get("classes/Animals", %{"status" => 1})
+      ParseClient.query("classes/Animals", %{"status" => 1})
 
   And this command will do the same check and print the results in the order
   that the items were created (use `-createdAt` to view the results in
   descending order):
 
-      ParseClient.get("classes/Animals", %{"status" => 1}, %{"order" => "createdAt"})
+      ParseClient.query("classes/Animals", %{"status" => 1}, %{"order" => "createdAt"})
+
+  To view all results in the order that they were created, use an empty map
+  as the second argument:
+
+      ParseClient.query("classes/Animals", %{}, %{"order" => "createdAt"})
   """
 
   alias ParseClient.Requests
 
-  @doc """
-  Parse filters and options in the query when both are maps.
-  """
-  def parse_filters(filters, options) when is_map(filters) and is_map(options) do
-    Dict.merge(%{where: JSEX.encode!(filters)}, options)
-    |> URI.encode_query
-  end
-
-  @doc """
-  Parse filters and options in the query.
-  """
-  def parse_filters(filters, options) do
-    unless filters == "", do: filters = %{where: JSEX.encode!(filters)} |> URI.encode_query
-    unless options == "", do: options = options |> URI.encode_query
-    filters <> options
-  end
-
   def get(url), do: Requests.request(:get, url, "", get_headers)
 
-  @doc """
-  Get request with filters.
-
-  Filters is a map that is used to make a `where={}` query.
-  Options is also a map. Options include "order", "limit", "count" and "include".
-
-  To make a request with options, but no filters, use "" as the second argument:
-
-      ParseClient.get("classes/Animals", "", %{"order" => "createdAt"})
-  """
-  def get(url, filters, options \\ "") do
-    filter_string = parse_filters(filters, options)
-    Requests.request(:get, url <> "?" <> filter_string, "", get_headers)
-  end
+  def get(url, filters, options \\ %{}), do: Requests.get(url, filters, options, get_headers)
 
   def post(url, body), do: Requests.request(:post, url, body, post_headers)
 
@@ -83,10 +58,12 @@ defmodule ParseClient do
 
   def query(url), do: get(url).body
 
-  def query(url, filters, options \\ []), do: get(url, filters, options).body
+  def query(url, filters, options \\ %{}) do
+    Requests.get(url, filters, options, get_headers).body
+  end
 
   @doc """
-  Grabs PARSE_API_KEY from system ENV
+  Grabs PARSE_APPLICATION_ID and PARSE_API_KEY from system ENV
   Returns key or ArgumentError
   """
   def get_system_variable(variable) do

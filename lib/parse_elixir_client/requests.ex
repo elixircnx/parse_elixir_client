@@ -23,7 +23,7 @@ defmodule ParseClient.Requests do
   end
 
   @doc """
-  Checks that the body can be encoded and handles any errors
+  Encodes the body and raises an error if it cannot be encoded
   ## Example
       iex> body = %{"job" => "Lumberjack", "clothes" => "stockings"}
       iex> ParseClient.Requests.process_request_body(body)
@@ -47,5 +47,38 @@ defmodule ParseClient.Requests do
       {:ok, text} -> text
       {:error, _} -> "An error has occurred while processing the json response"
     end
+  end
+
+  @doc """
+  Parse filters and options in the query.
+  """
+  def parse_filters(filters, options) when is_map(filters) and map_size(filters) > 0 do
+    %{where: JSEX.encode!(filters)} |> Dict.merge(options) |> URI.encode_query
+  end
+
+  @doc """
+  Parse options in the query.
+  """
+  def parse_filters(_, options) when is_map(options) do
+    options |> URI.encode_query
+  end
+
+  def parse_filters(_, _) do
+    raise ArgumentError, message: "filters and options arguments should be maps"
+  end
+
+  @doc """
+  Get request with filters.
+
+  Filters is a map that is used to make a `where={}` query.
+  Options is also a map. Options include "order", "limit", "count" and "include".
+
+  To make a request with options, but no filters, use %{} as the second argument:
+
+      ParseClient.get("classes/Animals", %{}, %{"order" => "createdAt"})
+  """
+  def get(url, filters, options, headers) do
+    filter_string = parse_filters(filters, options)
+    request(:get, url <> "?" <> filter_string, "", headers)
   end
 end
