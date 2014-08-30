@@ -1,6 +1,6 @@
 defmodule ParseClient do
   @moduledoc """
-  REST API client for Parse
+  REST API client for Parse in Elixir
 
   ## Example usage
 

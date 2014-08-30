@@ -7,7 +7,7 @@ An Elixir client for the parse.com REST API
 
 Set environment variables using your parse.com project settings.
 
-Ubuntu example in *./bash_profile*
+Ubuntu example in *./bash_profile* or *./bashrc*
 ```    
 PARSE_REST_API_KEY=my_REST_API_key
 PARSE_APPLICATION_ID=my_Application_ID
@@ -17,6 +17,11 @@ PARSE_APPLICATION_ID=my_Application_ID
 - Develop a full featured REST API for parse.com
 - Distribute as a Hex package
 - Discover, learn and have fun!
+
+## Documentation
+
+Generated docs are hosted on our GitHub page
+http://elixircnx.github.io/docs/parse_elixir_client
 
 ## Contributing
 
