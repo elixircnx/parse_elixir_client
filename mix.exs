@@ -3,8 +3,10 @@ defmodule ParseClient.Mixfile do
 
   def project do
     [app: :parse_elixir_client,
-     version: "0.0.1",
-     elixir: "~> 0.15.0",
+     version: "0.1.0-dev",
+     elixir: "~> 0.15.1",
+     name: "PARSE CLIENT",
+     source_url: "https://github.com/elixircnx/parse_elixir_client",
      deps: deps]
   end
 
@@ -31,13 +33,5 @@ defmodule ParseClient.Mixfile do
       {:earmark, "~> 0.1", only: :dev},
       {:ex_doc, "~> 0.5", only: :dev}
     ]
-  end
-
-  def project do
-    [app: :parse_elixir_client,
-     version: "0.0.1-dev",
-     name: "PARSE CLIENT",
-     source_url: "https://github.com/elixircnx/parse_elixir_client",
-     deps: deps]
   end
 end
