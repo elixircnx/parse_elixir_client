@@ -21,7 +21,7 @@ PARSE_APPLICATION_ID=my_Application_ID
 ## Documentation
 
 Generated docs are hosted on our GitHub page
-[http://elixircnx.github.io/parse_elixir_client]
+http://elixircnx.github.io/docs/parse_elixir_client
 
 ## Contributing
 
