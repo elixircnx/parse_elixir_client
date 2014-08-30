@@ -2,7 +2,7 @@ defmodule ParseClient.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :parse_elixir_client,
+    [app: :parse_client,
      version: "0.1.0-dev",
      elixir: "~> 0.15.1",
      name: "PARSE CLIENT",
