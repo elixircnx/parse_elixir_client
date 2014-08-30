@@ -27,7 +27,17 @@ defmodule ParseClient.Mixfile do
   defp deps do
     [
       {:jsex,   "~> 2.0.0"},
-      {:httpoison, "~> 0.4.0"}
+      {:httpoison, "~> 0.4.0"},
+      {:earmark, "~> 0.1", only: :dev},
+      {:ex_doc, "~> 0.5", only: :dev}
     ]
+  end
+
+  def project do
+    [app: :parse_elixir_client,
+     version: "0.0.1-dev",
+     name: "PARSE CLIENT",
+     source_url: "https://github.com/elixircnx/parse_elixir_client",
+     deps: deps]
   end
 end
