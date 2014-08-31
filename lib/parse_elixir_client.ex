@@ -46,18 +46,39 @@ defmodule ParseClient do
 
   alias ParseClient.Requests
 
+  @doc """
+  Get request for making queries.
+  """
   def get(url), do: Requests.request(:get, url, "", get_headers)
 
+  @doc """
+  Get request for making queries. The queries can be filtered.
+  """
   def get(url, filters, options \\ %{}), do: Requests.get(url, filters, options, get_headers)
 
+  @doc """
+  Request to create an object.
+  """
   def post(url, body), do: Requests.request(:post, url, body, post_headers)
 
+  @doc """
+  Request to update an object.
+  """
   def put(url, body), do: Requests.request(:put, url, body, post_headers)
 
+  @doc """
+  Request to delete an object.
+  """
   def delete(url), do: Requests.request(:delete, url, "", get_headers)
 
+  @doc """
+  Get request for making queries. Just returns the body of the response.
+  """
   def query(url), do: get(url).body
 
+  @doc """
+  Get request for making queries with filters. Just returns the body of the response.
+  """
   def query(url, filters, options \\ %{}) do
     Requests.get(url, filters, options, get_headers).body
   end
