@@ -4,29 +4,81 @@ defmodule ParseClient do
 
   ## Example usage
 
-  To get information about a class:
+  To get information about a class (and print out the whole response):
 
       ParseClient.get("classes/Lumberjacks")
 
-  This command prints out the whole response.
-  To just see the body, run the following command:
+  To just see the body, use the `query` function:
 
       ParseClient.query("classes/Lumberjacks")
 
-  To create a new object:
+  To create a new object, use the `post` function, to update an object, use
+  the `put` function, and to delete an object, use the `delete` function.
+
+  ## Use of filters when making queries
+
+  Queries can be filtered by using *filters* and *options*.
+
+  Use filters when you would use `where=` clauses in a request to the Parse API.
+  Options include "order", "limit", "count" and "include".
+
+  Both filters and options need to be Elixir maps.
+  """
+
+  alias ParseClient.Requests
+  alias ParseClient.Authenticate, as: Auth
+
+  @doc """
+  Get request for making queries.
+  """
+  def get(url), do: Requests.request(:get, url, "", get_headers)
+
+  @doc """
+  Get request for making queries. The queries can be filtered.
+  """
+  def get(url, filters, options \\ %{}), do: Requests.get(url, filters, options, get_headers)
+
+  @doc """
+  Request to create an object.
+
+  ## Example
 
       body = %{"animal" => "parrot, "name" => "NorwegianBlue", "status" => 0}
       ParseClient.post("classes/Animals", body)
 
-  To update an object:
+  """
+  def post(url, body), do: Requests.request(:post, url, body, post_headers)
+
+  @doc """
+  Request to update an object.
+
+  ## Example
 
       ParseClient.put("classes/Animals/12345678", %{"status" => 1})
 
-  To delete an object:
+  """
+  def put(url, body), do: Requests.request(:put, url, body, post_headers)
+
+  @doc """
+  Request to delete an object.
+
+  ## Example
 
       ParseClient.delete("classes/Animals/12345678")
 
-  ## Use of filters when making queries
+  """
+  def delete(url), do: Requests.request(:delete, url, "", get_headers)
+
+  @doc """
+  Get request for making queries. Just returns the body of the response.
+  """
+  def query(url), do: get(url).body
+
+  @doc """
+  Get request for making queries with filters and options.
+  Just returns the body of the response.
+
+  ## Examples
 
   The following command will check for Animals that have a status of 1:
 
@@ -43,73 +95,16 @@ defmodule ParseClient do
 
       ParseClient.query("classes/Animals", %{}, %{"order" => "createdAt"})
   """
-
-  alias ParseClient.Requests
-
-  @doc """
-  Get request for making queries.
-  """
-  def get(url), do: Requests.request(:get, url, "", get_headers)
-
-  @doc """
-  Get request for making queries. The queries can be filtered.
-  """
-  def get(url, filters, options \\ %{}), do: Requests.get(url, filters, options, get_headers)
-
-  @doc """
-  Request to create an object.
-  """
-  def post(url, body), do: Requests.request(:post, url, body, post_headers)
-
-  @doc """
-  Request to update an object.
-  """
-  def put(url, body), do: Requests.request(:put, url, body, post_headers)
-
-  @doc """
-  Request to delete an object.
-  """
-  def delete(url), do: Requests.request(:delete, url, "", get_headers)
-
-  @doc """
-  Get request for making queries. Just returns the body of the response.
-  """
-  def query(url), do: get(url).body
-
-  @doc """
-  Get request for making queries with filters. Just returns the body of the response.
-  """
   def query(url, filters, options \\ %{}) do
     Requests.get(url, filters, options, get_headers).body
   end
 
-  @doc """
-  Grabs PARSE_APPLICATION_ID and PARSE_API_KEY from system ENV
-  Returns key or ArgumentError
-  """
-  def get_system_variable(variable) do
-    System.get_env(variable)
-      |> check_variable
+  defp get_headers do
+    %{"X-Parse-Application-Id" => Auth.get_sysvar("PARSE_APPLICATION_ID"),
+      "X-Parse-REST-API-Key"   => Auth.get_sysvar("PARSE_REST_API_KEY")}
   end
 
-  defp check_variable(nil) do
-    raise ArgumentError, message: "parse system variable not set"
-  end
-
-  defp check_variable(system_variable), do: system_variable
-
-  @doc """
-  Headers for get and delete requests
-  """
-  def get_headers do
-    %{"X-Parse-Application-Id" => get_system_variable("PARSE_APPLICATION_ID"),
-      "X-Parse-REST-API-Key"   => get_system_variable("PARSE_REST_API_KEY")}
-  end
-
-  @doc """
-  Headers for post and put requests
-  """
-  def post_headers do
+  defp post_headers do
     Dict.put(get_headers, "Content-Type", "application/json")
   end
 end

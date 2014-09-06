@@ -4,7 +4,7 @@ defmodule ParseClient.Mixfile do
   def project do
     [app: :parse_client,
      version: "0.1.0-dev",
-     elixir: "~> 0.15.1",
+     elixir: ">= 0.15.1",
      name: "PARSE CLIENT",
      source_url: "https://github.com/elixircnx/parse_elixir_client",
      deps: deps]
