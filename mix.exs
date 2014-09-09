@@ -1,31 +1,27 @@
 defmodule ParseClient.Mixfile do
   use Mix.Project
 
+  @description """
+    Elixir client for the parse.com REST API
+  """
+
   def project do
-    [app: :parse_client,
-     version: "0.1.0-dev",
-     elixir: ">= 0.15.1",
-     name: "PARSE CLIENT",
-     source_url: "https://github.com/elixircnx/parse_elixir_client",
-     deps: deps]
+    [
+      app: :parse_client,
+      version: "0.1.1-dev",
+      elixir: "~> 1.0.0-rc1",
+      name: "Parse Client",
+      description: @description,
+      package: package,
+      source_url: "https://github.com/elixircnx/parse_elixir_client",
+      deps: deps
+    ]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type `mix help compile.app` for more information
   def application do
     [applications: [:logger, :httpoison]]
   end
 
-  # Dependencies can be hex.pm packages:
-  #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1"}
-  #
-  # Type `mix help deps` for more examples and options
   defp deps do
     [
       {:jsex,   "~> 2.0.0"},
@@ -33,5 +29,14 @@ defmodule ParseClient.Mixfile do
       {:earmark, "~> 0.1", only: :dev},
       {:ex_doc, "~> 0.5", only: :dev}
     ]
+  end
+
+  defp package do
+   [
+     contributors: ["David Whitlock", "Ben Sharman"],
+     licenses: ["MIT"],
+     links: [{ "GitHub", "https://github.com/elixircnx/parse_elixir_client",
+               "Docs", "http://elixircnx.github.io/docs/parse_elixir_client"}]
+   ]
   end
 end
