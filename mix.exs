@@ -35,8 +35,8 @@ defmodule ParseClient.Mixfile do
    [
      contributors: ["David Whitlock", "Ben Sharman"],
      licenses: ["MIT"],
-     links: [{ "GitHub", "https://github.com/elixircnx/parse_elixir_client",
-               "Docs", "http://elixircnx.github.io/docs/parse_elixir_client"}]
+     links: [github: "https://github.com/elixircnx/parse_elixir_client",
+             docs: "http://elixircnx.github.io/docs/parse_elixir_client"]
    ]
   end
 end
