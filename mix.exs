@@ -25,9 +25,9 @@ defmodule ParseClient.Mixfile do
   defp deps do
     [
       {:jsex,   "~> 2.0.0"},
-      {:httpoison, "~> 0.4.0"},
-      {:earmark, "~> 0.1", only: :dev},
-      {:ex_doc, "~> 0.5", only: :dev}
+      {:httpoison, "~> 0.4.2"},
+      {:earmark, "~> 0.1.10", only: :dev},
+      {:ex_doc, "~> 0.6.0", only: :dev}
     ]
   end
 
