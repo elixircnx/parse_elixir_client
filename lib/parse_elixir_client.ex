@@ -23,6 +23,22 @@ defmodule ParseClient do
   Options include "order", "limit", "count" and "include".
 
   Both filters and options need to be Elixir maps.
+
+  ### Comparisons in filters
+
+  The following filters from Parse.com are supported:
+
+  $lt, $lte, $gt, $gte, $ne, $in, $nin, $exists, $select, $dontSelect, $all
+
+  #### Examples
+
+  To make a query just about animals that are aged less then 3 years old:
+
+      ParseClient.query("classes/Animals", %{"age" => %{"$lt" => 3}})
+
+  To make a query just about animals who have a name and are still alive:
+
+      ParseClient.query("classes/Animals", %{"name" => %{"$exists" => true}, "status" => 1})
   """
 
   alias ParseClient.Requests

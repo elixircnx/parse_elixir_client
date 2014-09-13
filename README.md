@@ -50,9 +50,10 @@ http://elixircnx.github.io/docs/parse_elixir_client
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-## Warning!
+## Status
 
-This client is not ready to be used in production yet.
+This client is alpha status. It needs more testing at the production-level,
+and so we encourage you to try it out and give us your feedback.
 
 ## License
 MIT
