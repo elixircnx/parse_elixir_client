@@ -24,13 +24,25 @@ defmodule ParseClient do
 
   Both filters and options need to be Elixir maps.
 
-  ### Comparisons in filters
+  ## Comparisons in filters
 
-  The following filters from Parse.com are supported:
+  The following filters (keys) from Parse.com are supported:
 
-  $lt, $lte, $gt, $gte, $ne, $in, $nin, $exists, $select, $dontSelect, $all
+  Key | Operation
+  --- | ---
+  $lt | Less than
+  $lte | Less than or equal to
+  $gt | Greater than
+  $gte | Greater than or equal to
+  $ne | Not equal to
+  $in | Contained in
+  $nin | Not contained in
+  $exists | A value is set for the key
+  $select | This matches a value for a key in the result of a different query
+  $dontSelect | Requires that a key's value not match a value for a key in the result of a different query
+  $all | Contains all of the given values
 
-  #### Examples
+  ### Examples
 
   To make a query just about animals that are aged less then 3 years old:
 
