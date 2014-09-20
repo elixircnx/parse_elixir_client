@@ -25,7 +25,7 @@ Set your parse.com project settings as environment variables in
 
   ```elixir
   defp deps do
-    [ {:parse_client, "~> 0.1.1-dev"} ]
+    [ {:parse_client, "~> 0.1.1"} ]
   end
   ```
 
