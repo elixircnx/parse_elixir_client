@@ -1,18 +1,26 @@
 defmodule ParseClient.Authenticate do
 
   @doc """
-  Grabs PARSE_APPLICATION_ID and PARSE_API_KEY from the system environment.
-  Returns key or ArgumentError.
+  Grabs parse_application_id from environment config file.
+  Returns string or ArgumentError.
   """
-  def get_sysvar(variable) do
-    System.get_env(variable)
+  def config_parse_id do
+    Application.get_env(:parse_client, :parse_application_id)
+      |> check_variable
+  end
+
+  @doc """
+  Grabs parse_api_key from environment config file.
+  Returns string or ArgumentError.
+  """
+  def config_parse_key do
+    Application.get_env(:parse_client, :parse_api_key)
       |> check_variable
   end
 
   defp check_variable(nil) do
-    raise ArgumentError, message: "Parse system variable not set."
+    raise ArgumentError, message: "Please add your Parse.com environment variables to ParseClient config."
   end
 
-  defp check_variable(system_variable), do: system_variable
-
+  defp check_variable(env_variable), do: env_variable
 end
