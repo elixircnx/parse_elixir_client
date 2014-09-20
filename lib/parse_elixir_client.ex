@@ -128,8 +128,8 @@ defmodule ParseClient do
   end
 
   defp get_headers do
-    %{"X-Parse-Application-Id" => Auth.get_sysvar("PARSE_APPLICATION_ID"),
-      "X-Parse-REST-API-Key"   => Auth.get_sysvar("PARSE_REST_API_KEY")}
+    %{"X-Parse-Application-Id" => Auth.config_parse_id,
+      "X-Parse-REST-API-Key"   => Auth.config_parse_key}
   end
 
   defp post_headers do

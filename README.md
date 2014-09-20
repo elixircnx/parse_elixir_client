@@ -5,13 +5,18 @@ An Elixir client for the parse.com REST API
 
 ## Setup
 
-Set environment variables using your parse.com project settings.
+Set your parse.com project settings as environment variables in
+`config/prod.exs` (for production) or `config/dev.exs` (for development).
 
-Ubuntu example in *./bash_profile* or *./bashrc*
-```    
-PARSE_REST_API_KEY=my_REST_API_key
-PARSE_APPLICATION_ID=my_Application_ID
-```
+  ```elixir    
+  # prod.exs
+
+  use Mix.Config
+
+  config :parse_client,
+    parse_application_id: my_REST_API_key,
+    parse_api_key: my_Application_ID
+  ```
 
 ## Installation
 
