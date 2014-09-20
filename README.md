@@ -4,21 +4,6 @@ Version](http://img.shields.io/hexpm/v/parse_client.svg)](https://hex.pm/package
 
 An Elixir client for the parse.com REST API
 
-## Setup
-
-Set your parse.com project settings as environment variables in
-`config/prod.exs` (for production) or `config/dev.exs` (for development).
-
-  ```elixir    
-  # prod.exs
-
-  use Mix.Config
-
-  config :parse_client,
-    parse_application_id: my_REST_API_key,
-    parse_api_key: my_Application_ID
-  ```
-
 ## Installation
 
 1. Add parse_elixir_client to your `mix.exs` dependencies
@@ -37,16 +22,33 @@ Set your parse.com project settings as environment variables in
   end
   ```
 
-## Goals
+## Setup
 
-- Develop a full featured REST API for parse.com
-- Distribute as a Hex package
-- Discover, learn and have fun!
+1. Uncomment `import_config "#{Mix.env}.exs"` in `config/config.exs`
+
+2. Create environment files `config/prod.exs` (for production), `config/dev.exs` (for development) and `config/test.exs`
+
+3. Define your project config
+
+  ```elixir    
+  # prod.exs
+
+  use Mix.Config
+
+  config :my_project_name,
+    parse_application_id: "my_REST_API_key",
+    parse_api_key: "my_Application_ID"
+  ```
 
 ## Documentation
 
 Generated docs are hosted on our GitHub page
 http://elixircnx.github.io/docs/parse_elixir_client
+
+## Goals
+
+- Develop a full featured REST API for parse.com
+- Discover, learn and have fun!
 
 ## Contributing
 
