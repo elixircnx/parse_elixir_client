@@ -22,22 +22,24 @@ An Elixir client for the parse.com REST API
   end
   ```
 
+3. Run `mix do deps.get, compile`
+
 ## Setup
 
 1. Uncomment `import_config "#{Mix.env}.exs"` in `config/config.exs`
 
 2. Create environment files `config/prod.exs` (for production), `config/dev.exs` (for development) and `config/test.exs`
 
-3. Define your project config
+3. Configure parse_client with your parse.com Application ID and API key 
 
   ```elixir    
   # prod.exs
 
   use Mix.Config
 
-  config :my_project_name,
-    parse_application_id: "my_REST_API_key",
-    parse_api_key: "my_Application_ID"
+  config :parse_client,
+    parse_application_id: "my_Application_ID",
+    parse_api_key: "my_REST_API_key"
   ```
 
 ## Documentation
