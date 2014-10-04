@@ -18,7 +18,7 @@ defmodule ParseClient.ConfigTest do
   end
 
   test "returns ArgumentError when environment variable is nil" do
-    assert_raise ArgumentError, "Please add your Parse.com environment variables to ParseClient config.", fn ->
+    assert_raise ArgumentError, "Authentication failed. Add API key and App ID to config files.", fn ->
       config_parse_id
     end
   end
