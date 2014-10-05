@@ -70,22 +70,4 @@ defmodule ParseClient.Requests do
   def parse_filters(_, _) do
     raise ArgumentError, message: "filters and options arguments should be maps"
   end
-
-  @doc """
-  Get request with filters.
-
-  ## Examples
-
-  To make a query just about animals that have a name and are still alive:
-
-      ParseClient.get("classes/Animals", %{"name" => %{"$exists" => true}, "status" => 1})
-
-  To make a request with options, but no filters, use %{} as the second argument:
-
-      ParseClient.get("classes/Animals", %{}, %{"order" => "createdAt"})
-  """
-  def get(url, filters, options, headers) do
-    filter_string = parse_filters(filters, options)
-    request(:get, url <> "?" <> filter_string, "", headers)
-  end
 end
