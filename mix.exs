@@ -2,13 +2,13 @@ defmodule ParseClient.Mixfile do
   use Mix.Project
 
   @description """
-    Elixir client for the parse.com REST API
+  Elixir client for the parse.com REST API
   """
 
   def project do
     [
       app: :parse_client,
-      version: "0.1.1",
+      version: "0.2.0",
       elixir: "~> 1.0.0",
       name: "Parse Client",
       description: @description,
