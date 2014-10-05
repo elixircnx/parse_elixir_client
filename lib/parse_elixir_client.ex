@@ -124,10 +124,16 @@ defmodule ParseClient do
   def delete(url), do: Req.request(:delete, url, "", get_headers)
 
   @doc """
-  Requests from a user to signup. The user must provide a username
+  Request from a user to signup. The user must provide a username
   and a password. The options argument refers to additional information,
   such as email address or phone number, and it needs to be in the form
   of an Elixir map.
+
+  ## Examples
+
+      ParseClient.signup("Duchamp", "L_H;OO#Q")
+      ParseClient.signup("Duchamp", "L_H;OO#Q", %{"email" => "eros@selavy.com"})
+
   """
   def signup(username, password, options \\ %{}) do
     data = Dict.merge(%{"username" => username, "password" => password}, options)
@@ -136,6 +142,7 @@ defmodule ParseClient do
 
   @doc """
   Request from a user to login. Username and password are required.
+  As in the signup function, username and password needs to be strings.
   """
   def login(username, password) do
     get "login", %{"username" => username, "password" => password}
@@ -143,6 +150,11 @@ defmodule ParseClient do
 
   @doc """
   Request to reset a user's password.
+
+  ## Example
+
+      ParseClient.request_passwd_reset("example@example.com")
+
   """
   def request_passwd_reset(email) do
     post "requestPasswordReset", %{"email" => email}
@@ -150,6 +162,11 @@ defmodule ParseClient do
 
   @doc """
   Validates the user. Takes the user's session token as the only argument.
+
+  ## Example
+
+      ParseClient.validate_user("12345678")
+
   """
   def validate_user(token_val) do
     Req.request :get, "users/me", "", post_headers("X-Parse-Session-Token", token_val)
