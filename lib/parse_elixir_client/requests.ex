@@ -31,7 +31,7 @@ defmodule ParseClient.Requests do
       ...> ParseClient.Requests.process_request_body(body)
       ~S({\"clothes\":\"stockings\",\"job\":\"Lumberjack\"})
   """
-  def process_request_body(body), do: JSEX.encode! body
+  def process_request_body(body), do: JSEX.encode!(body)
 
   @doc """
   Checks that the body can be decoded and handles any errors.
