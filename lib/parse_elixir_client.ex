@@ -76,7 +76,7 @@ defmodule ParseClient do
   """
   def get(url, filters, options \\ %{}) do
     filter_string = Req.parse_filters(filters, options)
-    Req.request :get, url <> "?" <> filter_string, "", get_headers
+    Req.request(:get, url <> "?" <> filter_string, "", get_headers)
   end
 
   @doc """
@@ -137,7 +137,7 @@ defmodule ParseClient do
   """
   def signup(username, password, options \\ %{}) do
     data = Dict.merge(%{"username" => username, "password" => password}, options)
-    post "users", data
+    post("users", data)
   end
 
   @doc """
@@ -145,7 +145,7 @@ defmodule ParseClient do
   As in the signup function, username and password needs to be strings.
   """
   def login(username, password) do
-    get "login", %{"username" => username, "password" => password}
+    get("login", %{"username" => username, "password" => password})
   end
 
   @doc """
@@ -157,7 +157,7 @@ defmodule ParseClient do
 
   """
   def request_passwd_reset(email) do
-    post "requestPasswordReset", %{"email" => email}
+    post("requestPasswordReset", %{"email" => email})
   end
 
   @doc """
@@ -169,14 +169,14 @@ defmodule ParseClient do
 
   """
   def validate_user(token_val) do
-    Req.request :get, "users/me", "", post_headers("X-Parse-Session-Token", token_val)
+    Req.request(:get, "users/me", "", post_headers("X-Parse-Session-Token", token_val))
   end
 
   @doc """
   Post request to upload a file.
   """
   def upload_file(url, contents, content_type) do
-    Req.request :post, url, contents, post_headers("Content-Type", content_type)
+    Req.request(:post, url, contents, post_headers("Content-Type", content_type))
   end
 
   defp get_headers do
