@@ -143,7 +143,8 @@ defmodule ParseClient do
   As in the signup function, username and password needs to be strings.
   """
   def login(username, password) do
-    get("login", %{"username" => username, "password" => password})
+    params = %{"username" => username, "password" => password} |> URI.encode_query
+    get("login?#{params}")
   end
 
   @doc """
