@@ -135,7 +135,7 @@ defmodule ParseClient do
   """
   def signup(username, password, options \\ %{}) do
     data = Dict.merge(%{"username" => username, "password" => password}, options)
-    post("users", data)
+    post("users", data).body
   end
 
   @doc """
@@ -144,7 +144,7 @@ defmodule ParseClient do
   """
   def login(username, password) do
     params = %{"username" => username, "password" => password} |> URI.encode_query
-    get("login?#{params}")
+    get("login?#{params}").body
   end
 
   @doc """
@@ -166,7 +166,7 @@ defmodule ParseClient do
       ParseClient.validate_user("12345678")
   """
   def validate_user(token_val) do
-    Req.request(:get, "users/me", "", post_headers("X-Parse-Session-Token", token_val))
+    Req.request(:get, "users/me", "", post_headers("X-Parse-Session-Token", token_val)).body
   end
 
   @doc """
