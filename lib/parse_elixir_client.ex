@@ -4,7 +4,7 @@ defmodule ParseClient do
 
   ## Example usage
 
-  To get information about a class (and print out the whole response):
+  To get information about an object (and print out the whole response):
 
       ParseClient.get("classes/Lumberjacks")
 
@@ -14,6 +14,8 @@ defmodule ParseClient do
 
   To create a new object, use the `post` function, to update an object, use
   the `put` function, and to delete an object, use the `delete` function.
+
+  The `get` and `query` methods can also be used with users and roles.
 
   ## Use of filters when making queries
 
@@ -99,7 +101,6 @@ defmodule ParseClient do
 
       body = %{"animal" => "parrot, "name" => "NorwegianBlue", "status" => 0}
       ParseClient.post("classes/Animals", body)
-
   """
   def post(url, body), do: Req.request(:post, url, body, post_headers)
 
@@ -109,7 +110,6 @@ defmodule ParseClient do
   ## Example
 
       ParseClient.put("classes/Animals/12345678", %{"status" => 1})
-
   """
   def put(url, body), do: Req.request(:put, url, body, post_headers)
 
@@ -119,7 +119,6 @@ defmodule ParseClient do
   ## Example
 
       ParseClient.delete("classes/Animals/12345678")
-
   """
   def delete(url), do: Req.request(:delete, url, "", get_headers)
 
@@ -133,7 +132,6 @@ defmodule ParseClient do
 
       ParseClient.signup("Duchamp", "L_H;OO#Q")
       ParseClient.signup("Duchamp", "L_H;OO#Q", %{"email" => "eros@selavy.com"})
-
   """
   def signup(username, password, options \\ %{}) do
     data = Dict.merge(%{"username" => username, "password" => password}, options)
@@ -154,7 +152,6 @@ defmodule ParseClient do
   ## Example
 
       ParseClient.request_passwd_reset("example@example.com")
-
   """
   def request_passwd_reset(email) do
     post("requestPasswordReset", %{"email" => email})
@@ -166,10 +163,20 @@ defmodule ParseClient do
   ## Example
 
       ParseClient.validate_user("12345678")
-
   """
   def validate_user(token_val) do
     Req.request(:get, "users/me", "", post_headers("X-Parse-Session-Token", token_val))
+  end
+
+  @doc """
+  Deletes the user. Takes the user's objectid and session token as arguments.
+
+  ## Example
+
+      ParseClient.delete_user("g7y9tkhB7O", "12345678")
+  """
+  def delete_user(objectid, token_val) do
+    Req.request(:delete, "users/#{objectid}", "", post_headers("X-Parse-Session-Token", token_val))
   end
 
   @doc """
