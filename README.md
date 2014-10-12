@@ -44,8 +44,7 @@ An Elixir client for the parse.com REST API
 
 ## Documentation
 
-Generated docs are hosted on our GitHub page
-http://elixircnx.github.io/docs/parse_elixir_client
+http://hexdocs.pm/parse_client
 
 ## Goals
 
