@@ -30,8 +30,20 @@ An Elixir client for the parse.com REST API
 
 2. Create environment files `config/prod.exs` (for production), `config/dev.exs` (for development) and `config/test.exs`
 
-3. Configure parse_client with your parse.com Application ID and API key 
+3. Configure parse_client with your parse.com Application ID and API key
 
+  Use system variables (preferred)
+  ```elixir    
+  # prod.exs
+
+  use Mix.Config
+
+  config :parse_client,
+    parse_application_id: System.get_env("PARSE_APPLICATION_ID"),
+    parse_api_key: System.get_env("PARSE_API_KEY")
+  ```
+
+  Or use them explicitly
   ```elixir    
   # prod.exs
 
