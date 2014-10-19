@@ -61,7 +61,7 @@ defmodule ParseClient do
   @doc """
   Get request for making queries.
   """
-  def get(url), do: Req.request(:get, url, "", get_headers)
+  def get(url), do: Req.request!(:get, url, "", get_headers)
 
   @doc """
   Get request with filters.
@@ -78,7 +78,7 @@ defmodule ParseClient do
   """
   def get(url, filters, options \\ %{}) do
     filter_string = Req.parse_filters(filters, options)
-    Req.request(:get, url <> "?" <> filter_string, "", get_headers)
+    Req.request!(:get, url <> "?" <> filter_string, "", get_headers)
   end
 
   @doc """
@@ -102,7 +102,7 @@ defmodule ParseClient do
       body = %{"animal" => "parrot, "name" => "NorwegianBlue", "status" => 0}
       ParseClient.post("classes/Animals", body)
   """
-  def post(url, body), do: Req.request(:post, url, body, post_headers)
+  def post(url, body), do: Req.request!(:post, url, body, post_headers)
 
   @doc """
   Request to update an object.
@@ -111,7 +111,7 @@ defmodule ParseClient do
 
       ParseClient.put("classes/Animals/12345678", %{"status" => 1})
   """
-  def put(url, body), do: Req.request(:put, url, body, post_headers)
+  def put(url, body), do: Req.request!(:put, url, body, post_headers)
 
   @doc """
   Request to delete an object.
@@ -120,7 +120,7 @@ defmodule ParseClient do
 
       ParseClient.delete("classes/Animals/12345678")
   """
-  def delete(url), do: Req.request(:delete, url, "", get_headers)
+  def delete(url), do: Req.request!(:delete, url, "", get_headers)
 
   @doc """
   Request from a user to signup. The user must provide a username
@@ -166,7 +166,7 @@ defmodule ParseClient do
       ParseClient.validate_user("12345678")
   """
   def validate_user(token_val) do
-    Req.request(:get, "users/me", "", post_headers("X-Parse-Session-Token", token_val)).body
+    Req.request!(:get, "users/me", "", post_headers("X-Parse-Session-Token", token_val)).body
   end
 
   @doc """
@@ -177,14 +177,14 @@ defmodule ParseClient do
       ParseClient.delete_user("g7y9tkhB7O", "12345678")
   """
   def delete_user(objectid, token_val) do
-    Req.request(:delete, "users/#{objectid}", "", post_headers("X-Parse-Session-Token", token_val))
+    Req.request!(:delete, "users/#{objectid}", "", post_headers("X-Parse-Session-Token", token_val))
   end
 
   @doc """
   Post request to upload a file.
   """
   def upload_file(url, contents, content_type) do
-    Req.request(:post, url, contents, post_headers("Content-Type", content_type))
+    Req.request!(:post, url, contents, post_headers("Content-Type", content_type))
   end
 
   defp get_headers do
