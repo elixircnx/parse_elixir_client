@@ -8,7 +8,7 @@ defmodule ParseClient.Mixfile do
   def project do
     [
       app: :parse_client,
-      version: "0.2.1",
+      version: "0.2.2",
       elixir: "~> 1.0.0",
       name: "Parse Client",
       description: @description,
@@ -36,7 +36,7 @@ defmodule ParseClient.Mixfile do
      contributors: ["David Whitlock", "Ben Sharman"],
      licenses: ["MIT"],
      links: %{"GitHub" => "https://github.com/elixircnx/parse_elixir_client",
-              "Docs" => "http://elixircnx.github.io/docs/parse_elixir_client"}
+              "Docs" => "http://hexdocs.pm/parse_client"}
    ]
   end
 end
