@@ -10,7 +10,7 @@ An Elixir client for the parse.com REST API
 
   ```elixir
   defp deps do
-    [ {:parse_client, "~> 0.2.2"} ]
+    [ {:parse_client, "~> 0.2.3"} ]
   end
   ```
 
@@ -73,7 +73,7 @@ http://hexdocs.pm/parse_client
 
 ## Status
 
-This client is alpha status. It needs more testing at the production-level,
+This client needs more testing at the production-level,
 and so we encourage you to try it out and give us your feedback.
 
 ## License
