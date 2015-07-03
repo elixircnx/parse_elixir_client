@@ -29,9 +29,9 @@ defmodule ParseClient.Requests do
 
       iex> body = %{"job" => "Lumberjack", "clothes" => "stockings"}
       ...> ParseClient.Requests.process_request_body(body)
-      ~S({\"clothes\":\"stockings\",\"job\":\"Lumberjack\"})
+      ~S({\"job\":\"Lumberjack\",\"clothes\":\"stockings\"})
   """
-  def process_request_body(body), do: JSX.encode!(body)
+  def process_request_body(body), do: Poison.encode!(body)
 
   @doc """
   Checks that the body can be decoded and handles any errors.
@@ -44,7 +44,7 @@ defmodule ParseClient.Requests do
       %{score: 42, objectId: "sOxpug2373", playerName: "Tommy"}
   """
   def process_response_body(body) do
-    case JSX.decode(body, [{:labels, :atom}]) do
+    case Poison.decode(body, keys: :atoms!) do
       {:ok, text} -> text
       {:error, _} -> "An error has occurred while processing the json response"
     end
@@ -57,7 +57,7 @@ defmodule ParseClient.Requests do
   Options is also a map. Options include "order", "limit", "count" and "include".
   """
   def parse_filters(filters, options) when is_map(filters) and map_size(filters) > 0 do
-    %{where: JSX.encode!(filters)} |> Dict.merge(options) |> URI.encode_query
+    %{where: Poison.encode!(filters)} |> Dict.merge(options) |> URI.encode_query
   end
 
   @doc """

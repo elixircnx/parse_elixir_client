@@ -77,4 +77,5 @@ This client needs more testing at the production-level,
 and so we encourage you to try it out and give us your feedback.
 
 ## License
+
 MIT
