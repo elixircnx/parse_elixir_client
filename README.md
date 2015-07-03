@@ -8,7 +8,7 @@ An Elixir client for the parse.com REST API
 
   ```elixir
   defp deps do
-    [ {:parse_client, "~> 0.2.3"} ]
+    [ {:parse_client, "~> 0.3"} ]
   end
   ```
 
