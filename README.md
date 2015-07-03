@@ -1,6 +1,4 @@
-# ParseClient
-[![Hex.pm
-Version](http://img.shields.io/hexpm/v/parse_client.svg)](https://hex.pm/packages/parse_client)
+# ParseClient [![Build Status](https://travis-ci.org/elixircnx/parse_elixir_client.svg?branch=master "Build Status")](https://travis-ci.org/elixircnx/parse_elixir_client) [![Hex.pm Version](http://img.shields.io/hexpm/v/parse_client.svg)](https://hex.pm/packages/parse_client)
 
 An Elixir client for the parse.com REST API
 
